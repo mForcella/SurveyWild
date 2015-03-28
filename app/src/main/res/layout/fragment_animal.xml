@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/animalBar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/birdBtn"
+            android:text="@string/birds"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/insectBtn"
+            android:text="@string/insects"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/mammalBtn"
+            android:text="@string/mammal"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/otherAnimalBtn"
+            android:text="@string/other"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>

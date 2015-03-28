@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <FrameLayout
+        android:id="@+id/top_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/mainBar"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/plantBtn"
+                android:text="@string/plants"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/animalBtn"
+                android:text="@string/animals"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/fungiBtn"
+                android:text="@string/fungi"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/invasiveBtn"
+                android:text="@string/invasive"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/sub_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <FrameLayout
+        android:id="@+id/main_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

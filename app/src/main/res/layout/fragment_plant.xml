@@ -1,0 +1,61 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/plantBar"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/treeBtn"
+            android:text="@string/trees"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/shrubBtn"
+            android:text="@string/shrubs"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/vineBtn"
+            android:text="@string/vines"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/grassBtn"
+            android:text="@string/grass"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/flowerBtn"
+            android:text="@string/flowers"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/otherPlantBtn"
+            android:text="@string/other"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
