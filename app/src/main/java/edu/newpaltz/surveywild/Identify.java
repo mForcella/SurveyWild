@@ -3,6 +3,7 @@ package edu.newpaltz.surveywild;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Identify extends ActionBarActivity {
+
+    String TAG_FRAGMENT = "main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +26,7 @@ public class Identify extends ActionBarActivity {
         plantBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadPlantFrag();
+                loadSubFrag(new PlantFragment());
             }
         });
 
@@ -31,7 +34,7 @@ public class Identify extends ActionBarActivity {
         animalBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadAnimalFrag();
+                loadSubFrag(new AnimalFragment());
             }
         });
 
@@ -39,6 +42,7 @@ public class Identify extends ActionBarActivity {
         fungiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadSubFrag(new FungiFragment());
                 loadIdFrag("fungi");
             }
         });
@@ -47,6 +51,7 @@ public class Identify extends ActionBarActivity {
         invasiveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadSubFrag(new InvasiveFragment());
                 loadIdFrag("invasive");
             }
         });
@@ -57,22 +62,23 @@ public class Identify extends ActionBarActivity {
      */
     public void loadIdFrag(String category) {
         IdentifyFragment identify = new IdentifyFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("category", category);
+        identify.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_page, identify).commit();
-        TextView viewing = (TextView)findViewById(R.id.viewing);
-        viewing.setText("Viewing " + category + " in your area.");
+                .replace(R.id.main_page, identify, TAG_FRAGMENT).commit();
     }
 
-    public void loadPlantFrag() {
-        PlantFragment plant = new PlantFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.sub_menu, plant).commit();
+    public void removeIdFrag() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+        if(fragment != null)
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
-    public void loadAnimalFrag() {
-        AnimalFragment animal = new AnimalFragment();
+    public void loadSubFrag(Fragment subFrag) {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.sub_menu, animal).commit();
+                .replace(R.id.sub_menu, subFrag).commit();
+        removeIdFrag();
     }
 
     @Override
@@ -109,8 +115,13 @@ public class Identify extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // inflate layout
-            //View rootView = inflater.inflate(R.layout.fragment_animal, container, false);
-            return inflater.inflate(R.layout.fragment_identify, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_identify, container, false);
+            TextView viewing = (TextView) rootView.findViewById(R.id.viewing);
+            // get category and set text view
+            Bundle bundle = this.getArguments();
+            String category = bundle.getString("category", null);
+            viewing.setText("Viewing " + category + " in your area.");
+            return rootView;
         }
     }
 
@@ -133,7 +144,7 @@ public class Identify extends ActionBarActivity {
             treeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("tree");
+                    ((Identify)getActivity()).loadIdFrag("trees");
                 }
             });
 
@@ -141,7 +152,7 @@ public class Identify extends ActionBarActivity {
             shrubBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("shrub");
+                    ((Identify)getActivity()).loadIdFrag("shrubs");
                 }
             });
 
@@ -149,7 +160,7 @@ public class Identify extends ActionBarActivity {
             vineBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("vine");
+                    ((Identify)getActivity()).loadIdFrag("vines");
                 }
             });
 
@@ -157,7 +168,7 @@ public class Identify extends ActionBarActivity {
             grassBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("grass");
+                    ((Identify)getActivity()).loadIdFrag("grasses");
                 }
             });
 
@@ -165,7 +176,7 @@ public class Identify extends ActionBarActivity {
             flowerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("flower");
+                    ((Identify)getActivity()).loadIdFrag("flowers");
                 }
             });
 
@@ -173,7 +184,7 @@ public class Identify extends ActionBarActivity {
             otherPlantBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("other_plant");
+                    ((Identify)getActivity()).loadIdFrag("plants (other)");
                 }
             });
 
@@ -200,7 +211,7 @@ public class Identify extends ActionBarActivity {
             birdBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("bird");
+                    ((Identify)getActivity()).loadIdFrag("birds");
                 }
             });
 
@@ -208,7 +219,7 @@ public class Identify extends ActionBarActivity {
             insectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("insect");
+                    ((Identify)getActivity()).loadIdFrag("insects");
                 }
             });
 
@@ -216,7 +227,7 @@ public class Identify extends ActionBarActivity {
             mammalBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("mammal");
+                    ((Identify)getActivity()).loadIdFrag("mammals");
                 }
             });
 
@@ -224,9 +235,51 @@ public class Identify extends ActionBarActivity {
             otherAnimalBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("other_animal");
+                    ((Identify)getActivity()).loadIdFrag("animals (other)");
                 }
             });
+
+            return rootView;
+        }
+    }
+
+    /**
+     * The fungi sub-menu bar.
+     */
+    public static class FungiFragment extends Fragment {
+
+        public FungiFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            // inflate layout
+            View rootView = inflater.inflate(R.layout.fragment_fungi, container, false);
+
+            // load main fragment
+            ((Identify)getActivity()).loadIdFrag("fungi");
+
+            return rootView;
+        }
+    }
+
+    /**
+     * The invasive sub-menu bar.
+     */
+    public static class InvasiveFragment extends Fragment {
+
+        public InvasiveFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            // inflate layout
+            View rootView = inflater.inflate(R.layout.fragment_invasive, container, false);
+
+            // load main fragment
+            ((Identify)getActivity()).loadIdFrag("invasives");
 
             return rootView;
         }
