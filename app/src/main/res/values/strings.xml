@@ -21,13 +21,14 @@
     <string name="view_species">Browse species</string>
     <string name="view_sightings">Browse sightings</string>
 
-    <!-- Top menu -->
+    <!-- ID main menu -->
     <string name="plants">Plants</string>
     <string name="animals">Animals</string>
     <string name="fungi">Fungi</string>
+    <string name="protists">Protists</string>
     <string name="invasive">Invasives</string>
 
-    <!-- Plant menu -->
+    <!-- ID Plant menu -->
     <string name="trees">Trees</string>
     <string name="shrubs">Shrubs</string>
     <string name="vines">Vines</string>
@@ -35,10 +36,12 @@
     <string name="flowers">Flowers</string>
     <string name="other">Other</string>
 
-    <!-- Animal menu -->
+    <!-- ID Animal menu -->
     <string name="birds">Birds</string>
     <string name="insects">Insects</string>
     <string name="mammal">Mammals</string>
+    <string name="herp">Reptiles &amp; Amphibians</string>
+    <string name="fish">Fish</string>
     <string name="app_name">Survey Wild</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main_menu">MainMenu</string>

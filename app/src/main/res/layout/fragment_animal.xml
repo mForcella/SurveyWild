@@ -34,6 +34,26 @@
             android:layout_weight="1"
             android:layout_height="wrap_content" />
 
+    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:id="@+id/herpBtn"
+        android:text="@string/herp"
+        android:background="?android:attr/selectableItemBackground"
+        android:textSize="12sp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:id="@+id/fishBtn"
+        android:text="@string/fish"
+        android:background="?android:attr/selectableItemBackground"
+        android:textSize="12sp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
         <Button
             style="?android:attr/borderlessButtonStyle"
             android:id="@+id/otherAnimalBtn"

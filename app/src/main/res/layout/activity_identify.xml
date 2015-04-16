@@ -48,6 +48,15 @@
 
             <Button
                 style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/protistBtn"
+                android:text="@string/protists"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/invasiveBtn"
                 android:text="@string/invasive"
                 android:background="?android:attr/selectableItemBackground"
@@ -62,12 +71,12 @@
     <FrameLayout
         android:id="@+id/sub_menu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
     <FrameLayout
         android:id="@+id/main_page"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 
 </LinearLayout>
