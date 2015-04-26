@@ -2,10 +2,10 @@ package edu.newpaltz.surveywild;
 
 public class Species {
 
-    String id, code, cName, sName, kingdom, phylum, sclass, order, family, genus, date;
+    String id, code, cName, sName, kingdom, phylum, sclass, order, family, genus, date, flag;
 
     public Species(String id, String code, String cName, String sName, String kingdom, String phylum,
-                   String sclass, String order, String family, String genus, String date) {
+                   String sclass, String order, String family, String genus, String date, String flag) {
         this.id = id;
         this.code = code;
         this.cName = cName;
@@ -17,10 +17,11 @@ public class Species {
         this.family = family;
         this.genus = genus;
         this.date = date;
+        this.flag = flag;
     }
 
-    public String getId() {
-        return id;
+    public int getId() {
+        return Integer.parseInt(id);
     }
 
     public String getCode() {
@@ -61,5 +62,9 @@ public class Species {
 
     public String getDate() {
         return date;
+    }
+
+    public String getFlag() {
+        return flag;
     }
 }

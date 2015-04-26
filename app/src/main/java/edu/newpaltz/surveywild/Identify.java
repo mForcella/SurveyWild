@@ -16,11 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Identify extends ActionBarActivity {
-
-    String TAG_FRAGMENT = "main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class Identify extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 loadSubFrag(new PlantFragment());
-                loadIdFrag("plants", null);
+                loadIdFrag("plants", null, false);
             }
         });
 
@@ -42,7 +41,7 @@ public class Identify extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 loadSubFrag(new AnimalFragment());
-                loadIdFrag("animals", null);
+                loadIdFrag("animals", null, false);
             }
         });
 
@@ -51,7 +50,7 @@ public class Identify extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 loadSubFrag(new FungiFragment());
-                loadIdFrag("fungi", null);
+                loadIdFrag("fungi", null, false);
             }
         });
 
@@ -60,7 +59,7 @@ public class Identify extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 loadSubFrag(new ProtistFragment());
-                loadIdFrag("protists", null);
+                loadIdFrag("protists", null, false);
             }
         });
 
@@ -69,7 +68,8 @@ public class Identify extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 loadSubFrag(new InvasiveFragment());
-                loadIdFrag("plants", "invasive");
+                String [] subcategory = {"invasive"};
+                loadIdFrag("plants", subcategory, false);
             }
         });
     }
@@ -77,19 +77,20 @@ public class Identify extends ActionBarActivity {
     /**
      * Functions for loading fragments.
      */
-    public void loadIdFrag(String category, String subcategory) {
+    public void loadIdFrag(String category, String[] subcategories, boolean exclude) {
         IdentifyFragment identify = new IdentifyFragment();
         Bundle bundle = new Bundle();
         bundle.putString("category", category);
-        if (subcategory != null)
-            bundle.putString("subcategory", subcategory);
+        if (subcategories != null)
+            bundle.putStringArray("subcategory", subcategories);
+        bundle.putBoolean("exclude", exclude);
         identify.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_page, identify, TAG_FRAGMENT).commit();
+                .replace(R.id.main_page, identify, "main").commit();
     }
 
     public void removeIdFrag() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("main");
         if(fragment != null)
             getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
@@ -139,29 +140,68 @@ public class Identify extends ActionBarActivity {
             // get category and set text view
             Bundle bundle = this.getArguments();
             String category = bundle.getString("category", null);
-            String subcategory = bundle.getString("subcategory", null);
+            String[] subcategories = bundle.getStringArray("subcategory");
+            boolean exclude = bundle.getBoolean("exclude", false);
             TextView viewing = (TextView) rootView.findViewById(R.id.viewing);
             viewing.setText("Viewing " + category + " in your area.");
 
-            // get list of species
+            // get list of species and keywords
             DBAdapter db;
             try {
                 db = new DBAdapter(getActivity());
+                MyApplication.mListCName = db.getCNames(category);
                 MyApplication.mListSpecies = db.getSpecies(category);
+                MyApplication.mListKeywords = db.getKeywords();
                 db.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
+            // check for subcategory
+            if (subcategories != null) {
+                // filter species list by keyword
+                MyApplication.mListCName = filterList(MyApplication.mListSpecies, subcategories, exclude);
+            }
+
             // initialize list view
             ListView lvSpecies = (ListView)rootView.findViewById(R.id.lv_species);
-            lvSpecies.setAdapter(new ListAdapter(getActivity(), R.id.lv_species, MyApplication.mListSpecies));
-
-            // check for subcategory
-
-            // populate list view
+            lvSpecies.setAdapter(new ListAdapter(getActivity(), R.id.lv_species, MyApplication.mListCName));
 
             return rootView;
+        }
+
+        public ArrayList<String> filterList(ArrayList<Species> list, String[] filters, boolean exclude) {
+            ArrayList<String> species = new ArrayList<>();
+            ArrayList<Integer> spId = new ArrayList<>();
+            // get species id from keyword filter
+            DBAdapter db;
+            try {
+                db = new DBAdapter(getActivity());
+                spId = db.getSpId(filters);
+                db.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // get species names from species list
+            if (exclude) {
+                Log.i("exclude: ",spId.toString());
+                for (Species sp: list) {
+                    boolean ex = false;
+                    for (Integer i: spId) {
+                        if (sp.getId() == i) ex = true;
+                    }
+                    if (!ex) species.add(sp.getcName());
+                }
+            }
+            else {
+                Log.i("exclude: ",spId.toString());
+                for (Species sp: list) {
+                    for (Integer i: spId) {
+                        if (sp.getId() == i) species.add(sp.getcName());
+                    }
+                }
+            }
+            return species;
         }
     }
 
@@ -184,7 +224,8 @@ public class Identify extends ActionBarActivity {
             treeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("plants", "trees");
+                    String [] subcategory = {"Tree"};
+                    ((Identify)getActivity()).loadIdFrag("plants", subcategory, false);
                 }
             });
 
@@ -192,7 +233,8 @@ public class Identify extends ActionBarActivity {
             shrubBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify) getActivity()).loadIdFrag("plants", "shrubs");
+                    String [] subcategory = {"Shrub"};
+                    ((Identify) getActivity()).loadIdFrag("plants", subcategory, false);
                 }
             });
 
@@ -200,7 +242,8 @@ public class Identify extends ActionBarActivity {
             vineBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("plants", "vines");
+                    String [] subcategory = {"Vine"};
+                    ((Identify)getActivity()).loadIdFrag("plants", subcategory, false);
                 }
             });
 
@@ -208,7 +251,8 @@ public class Identify extends ActionBarActivity {
             grassBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("plants", "grasses");
+                    String [] subcategory = {"Grass"};
+                    ((Identify)getActivity()).loadIdFrag("plants", subcategory, false);
                 }
             });
 
@@ -216,7 +260,8 @@ public class Identify extends ActionBarActivity {
             flowerBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("plants", "flowers");
+                    String [] subcategory = {"Herb"};
+                    ((Identify)getActivity()).loadIdFrag("plants", subcategory, false);
                 }
             });
 
@@ -224,7 +269,8 @@ public class Identify extends ActionBarActivity {
             otherPlantBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("plants", "other plants");
+                    String [] subcategory = {"Tree", "Shrub", "Vine", "Grass", "Herb"};
+                    ((Identify)getActivity()).loadIdFrag("plants", subcategory, true);
                 }
             });
 
@@ -251,7 +297,8 @@ public class Identify extends ActionBarActivity {
             birdBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("animals", "birds");
+                    String [] subcategory = {"Bird"};
+                    ((Identify)getActivity()).loadIdFrag("animals", subcategory, false);
                 }
             });
 
@@ -259,7 +306,8 @@ public class Identify extends ActionBarActivity {
             insectBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("animals", "insects");
+                    String [] subcategory = {"Insect"};
+                    ((Identify)getActivity()).loadIdFrag("animals", subcategory, false);
                 }
             });
 
@@ -267,7 +315,8 @@ public class Identify extends ActionBarActivity {
             mammalBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("animals", "mammals");
+                    String [] subcategory = {"Mammal"};
+                    ((Identify)getActivity()).loadIdFrag("animals", subcategory, false);
                 }
             });
 
@@ -275,7 +324,8 @@ public class Identify extends ActionBarActivity {
             herpBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("animals", "reptiles & amphibians");
+                    String [] subcategory = {"Reptile","Amphibian"};
+                    ((Identify)getActivity()).loadIdFrag("animals", subcategory, false);
                 }
             });
 
@@ -283,7 +333,8 @@ public class Identify extends ActionBarActivity {
             fishBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("animals", "fish");
+                    String [] subcategory = {"Fish"};
+                    ((Identify)getActivity()).loadIdFrag("animals", subcategory, false);
                 }
             });
 
@@ -291,7 +342,8 @@ public class Identify extends ActionBarActivity {
             otherAnimalBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((Identify)getActivity()).loadIdFrag("animals", "other animals");
+                    String [] subcategory = {"Bird", "Insect", "Mammal", "Fish", "Reptile", "Amphibian"};
+                    ((Identify)getActivity()).loadIdFrag("animals", subcategory, true);
                 }
             });
 
@@ -314,7 +366,7 @@ public class Identify extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_fungi, container, false);
 
             // load main fragment
-            ((Identify)getActivity()).loadIdFrag("fungi", null);
+            ((Identify)getActivity()).loadIdFrag("fungi", null, false);
 
             return rootView;
         }
@@ -335,7 +387,7 @@ public class Identify extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_protist, container, false);
 
             // load main fragment
-            ((Identify)getActivity()).loadIdFrag("protists", null);
+            ((Identify)getActivity()).loadIdFrag("protists", null, false);
 
             return rootView;
         }
@@ -356,7 +408,8 @@ public class Identify extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_invasive, container, false);
 
             // load main fragment
-            ((Identify)getActivity()).loadIdFrag("plants", "invasives");
+            String [] subcategory = {"Invasive"};
+            ((Identify)getActivity()).loadIdFrag("plants", subcategory, false);
 
             return rootView;
         }
@@ -365,13 +418,12 @@ public class Identify extends ActionBarActivity {
     /**
      * List adapter
      */
-    public static class ListAdapter extends ArrayAdapter<Species> {
+    public static class ListAdapter extends ArrayAdapter<String> {
 
-        private ArrayList<Species> mList;
+        private ArrayList<String> mList;
         Context c;
 
-        // constructor, assigns mListObjects to mList
-        public ListAdapter(Context context, int textViewResourceId, ArrayList<Species> list) {
+        public ListAdapter(Context context, int textViewResourceId, ArrayList<String> list) {
             super(context, textViewResourceId, list);
             mList = list;
             c = context;
@@ -381,16 +433,14 @@ public class Identify extends ActionBarActivity {
             View view = convertView;
             try{
                 if (view == null) {
-                    LayoutInflater vi = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    LayoutInflater vi = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                     view = vi.inflate(R.layout.list_item, parent, false);
                 }
-                final Species species = mList.get(position);
-                if (species != null) {
-                    String cName = species.getcName();
+                final String cName = mList.get(position);
+                if (cName != null) {
                     // setting list_item views
-                    ( (TextView) view.findViewById(R.id.tv_name) ).setTextSize(20);
                     ( (TextView) view.findViewById(R.id.tv_name) ).setText(cName);
-                    // go to individual sighting page
+                    // go to individual species page
                     ( view.findViewById(R.id.tv_name) ).setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
 

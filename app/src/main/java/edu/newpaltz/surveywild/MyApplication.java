@@ -12,6 +12,8 @@ public class MyApplication extends Application {
     public static Context mContext; // to get the application context
     public static String mImagePath;
     public static ArrayList<Species> mListSpecies;
+    public static ArrayList<String> mListCName;
+    public static ArrayList<SpKeyword> mListKeywords;
 
     public void onCreate(){
         super.onCreate();
